@@ -30,7 +30,7 @@ SECRET_KEY = str(os.getenv('DJANGO_SECRET', 'django-insecure-&it++w@bxggwtm8!&ub
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = ['ec2-34-208-101-66.us-west-2.compute.amazonaws.com', '127.0.0.1']
+ALLOWED_HOSTS = ['ec2-34-208-101-66.us-west-2.compute.amazonaws.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -133,33 +133,39 @@ USE_TZ = True
 
 
 CORS_ALLOWED_ORIGINS = [
-'http://localhost:3000'
+    'http://localhost:3000',
+    'https://suspicious-ride-e6d1b3.netlify.app'
 ]
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES':[
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-    ],
-    'DEFAULT_PARSER_CLASSES': (
-        'rest_framework.parsers.FormParser'
-     )
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.AllowAny',
+#     ],
+#     'DEFAULT_AUTHENTICATION_CLASSES':[
+#         'rest_framework_simplejwt.authentication.JWTAuthentication'
+#     ],
+#     'DEFAULT_PARSER_CLASSES': (
+#         'rest_framework.parsers.FormParser'
+#      )
+# }
+
+USE_S3 = os.getenv('USE_S3')
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+
+#STATIC_URL = '/static/'
+STATIC_FILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AWS_ACCESS_KEY_ID = str(os.getenv('AWS_ACCESS_KEY_ID'))
 AWS_SECRET_ACCESS_KEY = str(os.getenv('AWS_SECRET_ACCESS_KEY'))
@@ -167,9 +173,15 @@ AWS_STORAGE_BUCKET_NAME = str(os.getenv('AWS_STORAGE_BUCKET_NAME'))
 AWS_S3_SIGNATURE_VERSION = str(os.getenv('AWS_S3_SIGNATURE_VERSION'))
 AWS_S3_REGION_NAME = str(os.getenv('AWS_S3_REGION_NAME'))
 AWS_S3_FILE_OVERWRITE = os.getenv('AWS_S3_FILE_OVERWRITE')
-AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL')
+AWS_DEFAULT_ACL = str(os.getenv('AWS_DEFAULT_ACL'))
 AWS_S3_VERIFY = os.getenv('AWS_S3_VERIFY')
 DEFAULT_FILE_STORAGE = str(os.getenv('DEFAULT_FILE_STORAGE'))
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl' : 'max-age=86400'}
+AWS_LOCATION = 'static'
+AWS_S3_CUSTOM_DOMAIN = 'dhvhrwxyntk25.cloudfront.net'
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),

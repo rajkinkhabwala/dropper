@@ -6,4 +6,4 @@ from .serializers import UserSerializer
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    parser_classes = [parsers.JSONParser]
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]

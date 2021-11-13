@@ -17,12 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 
+def index(request):
+    return HttpResponse('STATUS : OK')
+
 urlpatterns = [
+    path('', index),
     path('admin/', admin.site.urls),
     path('api/', include('files.urls')),
     path('api/', include('users.urls')),

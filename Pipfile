@@ -12,6 +12,7 @@ boto3 = "*"
 python-dotenv = "*"
 djangorestframework-simplejwt = "*"
 django-cors-headers = "*"
+pyopenssl = "*"
 
 [dev-packages]
 
